@@ -63,7 +63,6 @@ def post_place(city_id):
         return make_response(jsonify({"error": "Missing user_id"}), 400)
     body = request.get_json()
 
-    print(body)
     if not storage.get(User, body["user_id"]):
         abort(404)
 
@@ -83,8 +82,10 @@ def put_place(place_id):
     if not request.get_json():
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
+    ignore = ["id", "user_id", "city_id", "created_at", "updated_at"]
     for key, val in dict(request.get_json()).items():
-        setattr(place, key, val)
+        if key not in ignore:
+            setattr(place, key, val)
 
     storage.save()
 

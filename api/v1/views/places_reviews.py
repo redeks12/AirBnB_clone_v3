@@ -66,7 +66,7 @@ def post_review(place_id):
     if "user_id" not in request.get_json():
         return make_response(jsonify({"error": "Missing user_id"}), 400)
 
-    if not storage.get(User, body.user_id):
+    if not storage.get(User, body["user_id"]):
         abort(404)
 
     instance = Review(**body)
