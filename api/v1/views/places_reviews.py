@@ -10,7 +10,9 @@ from models.review import Review
 from models.user import User
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["GET"], strict_slashes=False)
+@app_views.route(
+    "/places/<string:place_id>/reviews", methods=["GET"], strict_slashes=False
+)
 def get_place_reviews(place_id):
     """return a list of cities in the place object"""
     place = storage.get(Place, place_id)
@@ -23,7 +25,7 @@ def get_place_reviews(place_id):
         return jsonify([cit.to_dict() for cit in review])
 
 
-@app_views.route("/reviews/<review_id>", methods=["GET"], strict_slashes=False)
+@app_views.route("/reviews/<string:review_id>", methods=["GET"], strict_slashes=False)
 @swag_from("documentation/review/get_id.yml", methods=["GET"])
 def get_review_id(review_id):
     """Retrieves a specific review by id"""
@@ -47,7 +49,9 @@ def delete_review(review_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route("/places/<place_id>/reviews", methods=["POST"], strict_slashes=False)
+@app_views.route(
+    "/places/<string:place_id>/reviews", methods=["POST"], strict_slashes=False
+)
 @swag_from("documentation/review/post_review.yml", methods=["POST"])
 def post_review(place_id):
     """
@@ -75,7 +79,7 @@ def post_review(place_id):
     return make_response(jsonify(instance.to_dict()), 201)
 
 
-@app_views.route("/reviews/<review_id>", methods=["PUT"], strict_slashes=False)
+@app_views.route("/reviews/<string:review_id>", methods=["PUT"], strict_slashes=False)
 @swag_from("documentation/review/put_review.yml", methods=["PUT"])
 def put_review(review_id):
     """put review change the values of the review"""
@@ -85,9 +89,8 @@ def put_review(review_id):
     if not request.get_json():
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
-    ignore = ["id", "user_id", "place_id", "created_at", "updated_at"]
-    for key, val in dict(request.get_json()).items():
-        if key not in ignore:
+    for key, val in request.get_json().items():
+        if key not in ["id", "user_id", "place_id", "created_at", "updated_at"]:
             setattr(review, key, val)
 
     storage.save()
