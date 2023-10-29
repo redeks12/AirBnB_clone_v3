@@ -64,7 +64,7 @@ def post_place(city_id):
     body = request.get_json()
 
     print(body)
-    if not storage.get(User, body.user_id):
+    if not storage.get(User, body["user_id"]):
         abort(404)
 
     instance = Place(**body)
