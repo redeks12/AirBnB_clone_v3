@@ -85,8 +85,10 @@ def put_review(review_id):
     if not request.get_json():
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
+    ignore = ["id", "user_id", "place_id", "created_at", "updated_at"]
     for key, val in dict(request.get_json()).items():
-        setattr(review, key, val)
+        if key not in ignore:
+            setattr(review, key, val)
 
     storage.save()
 
