@@ -63,6 +63,7 @@ def post_place(city_id):
         return make_response(jsonify({"error": "Missing user_id"}), 400)
     body = request.get_json()
 
+    print(body)
     if not storage.get(User, body.user_id):
         abort(404)
 
