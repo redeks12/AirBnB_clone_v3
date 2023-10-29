@@ -42,9 +42,9 @@ def delete_review(review_id):
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    review.delete()
+    storage.delete(review)
     storage.save()
-    return jsonify({})
+    return make_response(jsonify({}), 200)
 
 
 @app_views.route("/places/<place_id>/reviews", methods=["POST"], strict_slashes=False)
@@ -72,7 +72,7 @@ def post_review(place_id):
     instance = Review(**body)
     instance.place_id = place_id
     instance.save()
-    return jsonify(instance.to_dict(), 201)
+    return make_response(jsonify(instance.to_dict()), 201)
 
 
 @app_views.route("/reviews/<review_id>", methods=["PUT"], strict_slashes=False)
@@ -86,7 +86,7 @@ def put_review(review_id):
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
     ignore = ["id", "user_id", "place_id", "created_at", "updated_at"]
-    for key, val in request.get_json().items():
+    for key, val in dict(request.get_json()).items():
         if key not in ignore:
             setattr(review, key, val)
 
