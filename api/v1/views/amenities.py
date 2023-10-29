@@ -52,7 +52,7 @@ def create_amenity():
     body = request.get_json()
     instance = Amenity(**body)
     instance.save()
-    return (jsonify(obj.to_dict()), 201)
+    return (jsonify(instance.to_dict()), 201)
 
 
 @app_views.route('/amenities/<string:amenity_id>', methods=['PUT'], strict_slashes=False)
