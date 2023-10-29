@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 """handles all default RESTFul API actions for User"""
-from models.user import User
-from models import storage
-from api.v1.views import app_views
-from flask import abort, jsonify, make_response, request, Flask
 from flasgger.utils import swag_from
+from flask import Flask, abort, jsonify, make_response, request
+
+from api.v1.views import app_views
+from models import storage
+from models.user import User
 
 
 @app_views.route("/users", methods=["GET"], strict_slashes=False)

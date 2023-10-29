@@ -40,9 +40,9 @@ def delete_place(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    storage.delete(place)
+    place.delete()
     storage.save()
-    return make_response(jsonify({}), 200)
+    return (jsonify({}), 200)
 
 
 @app_views.route("/cities/<city_id>/places", methods=["POST"], strict_slashes=False)
@@ -69,7 +69,7 @@ def post_place(city_id):
     instance = Place(**body)
     instance.city_id = city_id
     instance.save()
-    return make_response(jsonify(instance.to_dict()), 201)
+    return (jsonify(instance.to_dict()), 201)
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
@@ -83,7 +83,7 @@ def put_place(place_id):
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
     ignore = ["id", "user_id", "city_id", "created_at", "updated_at"]
-    for key, val in dict(request.get_json()).items():
+    for key, val in request.get_json().items():
         if key not in ignore:
             setattr(place, key, val)
 

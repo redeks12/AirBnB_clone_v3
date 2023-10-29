@@ -74,6 +74,7 @@ def put_city(city_id):
         abort(404)
     if not request.get_json():
         return make_response(jsonify({"error": "Not a JSON"}), 400)
+
     ignore = ["id", "state_id", "created_at", "updated_at"]
     for key, val in dict(request.get_json()).items():
         if key not in ignore:
