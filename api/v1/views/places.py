@@ -113,7 +113,7 @@ def search_place():
 
     if "states" in body:
         for state in body["states"]:
-            st = storage.get(State, state["id"])
+            st = storage.get(State, state)
             for city in st.cities:
                 cit = storage.get(City, city.id)
                 for pl in cit.places:
