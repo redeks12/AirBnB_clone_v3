@@ -44,7 +44,7 @@ def delete_place(place_id):
         abort(404)
     place.delete()
     storage.save()
-    return make_response(jsonify({}), 200)
+    return jsonify({})
 
 
 @app_views.route(
@@ -73,7 +73,7 @@ def post_place(city_id):
     instance = Place(**body)
     instance.city_id = city_id
     instance.save()
-    return make_response(jsonify(instance.to_dict()), 201)
+    return (jsonify(instance.to_dict()), 201)
 
 
 @app_views.route("/places/<string:place_id>", methods=["PUT"], strict_slashes=False)

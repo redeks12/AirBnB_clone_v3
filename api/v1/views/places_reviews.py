@@ -44,9 +44,9 @@ def delete_review(review_id):
     review = storage.get(Review, review_id)
     if review is None:
         abort(404)
-    storage.delete(review)
+    review.delete()
     storage.save()
-    return make_response(jsonify({}), 200)
+    return jsonify({})
 
 
 @app_views.route(
@@ -76,7 +76,7 @@ def post_review(place_id):
     instance = Review(**body)
     instance.place_id = place_id
     instance.save()
-    return make_response(jsonify(instance.to_dict()), 201)
+    return (jsonify(instance.to_dict()), 201)
 
 
 @app_views.route("/reviews/<string:review_id>", methods=["PUT"], strict_slashes=False)
@@ -84,7 +84,7 @@ def post_review(place_id):
 def put_review(review_id):
     """put review change the values of the review"""
     review = storage.get(Review, review_id)
-    if not review:
+    if review is None:
         abort(404)
     if not request.get_json():
         return make_response(jsonify({"error": "Not a JSON"}), 400)
