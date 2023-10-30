@@ -153,7 +153,7 @@ def search_place():
 
     pls = [p.to_dict() for p in pls]
 
-    for d in places_obs:
+    for d in pls:
         d_tuple = tuple(sorted(d.items()))
 
         if d_tuple not in seen:
