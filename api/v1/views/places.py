@@ -103,65 +103,38 @@ def search_place():
     """
     Creates a City object
     """
-    unique_list = []
-    seen = set()
-    places_obs = []
-    body = request.get_json()
-    newest = []
-
-    if not body:
-        return make_response(jsonify({"error": "Not a JSON"}), 400)
-    if len(body) == 0:
-        places = storage.all(Place).values()
-        return jsonify([cit.to_dict() for cit in places])
-
-    if "states" in body:
-        for state in body["states"]:
-            st = storage.get(State, state)
-            for city in st.cities:
-                cit = storage.get(City, city.id)
-                for pl in cit.places:
-                    places_obs.append(pl)
-
-    if "cities" in body:
-        for city in body["cities"]:
-            citt = storage.get(City, city)
-            for ci in citt.places:
-                places_obs.append(ci)
-
-    if "amenities" in body:
-        if places_obs:
-            ttt = places_obs
+    if request.get_json() is not None:
+        params = request.get_json()
+        states = params.get("states", [])
+        cities = params.get("cities", [])
+        amenities = params.get("amenities", [])
+        amenity_objects = []
+        for amenity_id in amenities:
+            amenity = storage.get("Amenity", amenity_id)
+            if amenity:
+                amenity_objects.append(amenity)
+        if states == cities == []:
+            places = storage.all("Place").values()
         else:
-            ttt = storage.all(Place).values()
-        for pl in ttt:
-            there = True
-            for amenity in body["amenities"]:
-                amm = storage.get(Amenity, amenity)
-                if amm not in pl.amenities:
-                    there = False
-            if there:
-                newest.append(pl)
-    if newest:
-        pls = newest
-        print("newest")
+            places = []
+            for state_id in states:
+                state = storage.get("State", state_id)
+                state_cities = state.cities
+                for city in state_cities:
+                    if city.id not in cities:
+                        cities.append(city.id)
+            for city_id in cities:
+                city = storage.get("City", city_id)
+                for place in city.places:
+                    places.append(place)
+        confirmed_places = []
+        for place in places:
+            place_amenities = place.amenities
+            confirmed_places.append(place.to_dict())
+            for amenity in amenity_objects:
+                if amenity not in place_amenities:
+                    confirmed_places.pop()
+                    break
+        return jsonify(confirmed_places)
     else:
-        print("oldest")
-        pls = places_obs
-
-    pls = [p.to_dict() for p in pls]
-
-    for d in pls:
-        if "amenities" in d:
-            print(f'delete: ${d["amenities"]}')
-            del d["amenities"]
-        d_tuple = tuple(sorted(d.items()))
-
-        # print(d)
-        # print("---------------------------------------")
-        # print(d_tuple)
-        if d_tuple not in seen:
-            unique_list.append(d)
-            seen.add(d_tuple)
-
-    return jsonify(unique_list)
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
