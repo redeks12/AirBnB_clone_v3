@@ -1,13 +1,15 @@
 #!/usr/bin/python3
 """ holds class User"""
-from typing import Any
-import models
-from models.base_model import BaseModel, Base
+from hashlib import md5
 from os import getenv
+from typing import Any
+
 import sqlalchemy
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from hashlib import md5
+
+import models
+from models.base_model import Base, BaseModel
 
 
 class User(BaseModel, Base):
@@ -31,8 +33,8 @@ class User(BaseModel, Base):
         """initializes user"""
         super().__init__(*args, **kwargs)
 
-    def __setattr__(self, __name: str, __value: Any) -> None:
+    def __setattr__(self, name, value) -> None:
         """sets the attribute on the password"""
-        if __name == "password":
-            __value = md5(__value).hexdigest()
-        return super().__setattr__(__name, __value)
+        if name == "password":
+            value = md5(value.encode()).hexdigest()
+        return super().__setattr__(name, value)
