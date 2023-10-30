@@ -135,11 +135,12 @@ def search_place():
                 if amenity not in place_amenities:
                     confirmed_places.pop()
                     break
-        confirmed_places = [
-            confirmed.pop("amenities", None) for confirmed in confirmed_places
-        ]
-        print(confirmed_places)
-        return jsonify(confirmed_places)
+        jj = []
+        for conf in confirmed_places:
+            conf.pop("amenities", None)
+            jj.append(conf)
+        print(jj)
+        return jsonify(jj)
     else:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
 
