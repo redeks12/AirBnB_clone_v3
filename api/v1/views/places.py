@@ -142,6 +142,7 @@ def search_place():
             for amenity in body["amenities"]:
                 amm = storage.get(Amenity, amenity)
                 if amm not in pl.amenities:
+                    print("aMM not in pl.amenities")
                     there = False
             if there:
                 print("newest there")
