@@ -63,7 +63,7 @@ class BaseModel:
     def to_dict(self, include_password=False):
         """returns a dictionary containing all keys/values of the instance"""
         new_dict = self.__dict__.copy()
-        if "password" in new_dict and not include_password:
+        if "password" in new_dict and include_password:
             new_dict.pop("password", None)
         if "created_at" in new_dict:
             new_dict["created_at"] = new_dict["created_at"].strftime(time)
