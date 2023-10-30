@@ -48,6 +48,6 @@ def post_place_amenity2(place_id, amenity_id):
         abort(404)
     if amenity in place.amenities:
         return (jsonify(amenity.to_dict()), 200)
-    place.amenities.append(obj)
+    place.amenities.append(amenity)
     storage.save()
     return (jsonify(amenity.to_dict(), 201))
