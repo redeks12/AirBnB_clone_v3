@@ -29,6 +29,10 @@ class User(BaseModel, Base):
         first_name = ""
         last_name = ""
 
+    def __init__(self, *args, **kwargs):
+        """initializes user"""
+        super().__init__(*args, **kwargs)
+
     @property
     def password(self):
         return self._password
@@ -37,10 +41,6 @@ class User(BaseModel, Base):
     def password(self, value):
         """Set the password"""
         self._password = md5(value.encode()).hexdigest()
-
-    def __init__(self, *args, **kwargs):
-        """initializes user"""
-        super().__init__(*args, **kwargs)
 
     # def __setattr__(self, name, value) -> None:
     #     """sets the attribute on the password"""
