@@ -128,5 +128,6 @@ def search_place():
             for ci in citt.places:
                 places_obs.append(ci.to_dict())
 
+    print(places_obs)
     unique_list = list(set(places_obs))
     return jsonify(unique_list)
