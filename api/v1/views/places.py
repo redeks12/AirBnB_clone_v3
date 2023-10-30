@@ -122,10 +122,11 @@ def search_place():
                     print("getting the places")
                     places_obs.append(pl.to_dict())
 
-    # if not storage.get(User, body["user_id"]):
-    #     abort(404)
+    if "cities" in body:
+        for city in body["cities"]:
+            citt = storage.get(City, city)
+            for ci in citt.places:
+                places_obs.append(ci.to_dict())
 
-    # instance = Place(**body)
-    # instance.city_id = city_id
-    # instance.save()
-    return jsonify(places_obs)
+    unique_list = list(set(places_obs))
+    return jsonify(unique_list)
