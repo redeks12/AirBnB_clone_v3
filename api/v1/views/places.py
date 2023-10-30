@@ -135,6 +135,7 @@ def search_place():
                 if amenity not in place_amenities:
                     confirmed_places.pop()
                     break
+        print(confirmed_places)
         return jsonify(confirmed_places)
     else:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
