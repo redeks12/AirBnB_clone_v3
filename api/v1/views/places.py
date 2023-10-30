@@ -144,6 +144,7 @@ def search_place():
                 if amm not in pl.amenities:
                     print("aMM not in pl.amenities")
                     there = False
+            print(len(pl.amenities))
             if there:
                 print("newest there")
                 newest.append(pl)
