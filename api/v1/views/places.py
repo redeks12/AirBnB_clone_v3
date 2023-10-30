@@ -141,8 +141,9 @@ def search_place():
                 amm = storage.get(Amenity, amenity)
                 if amm not in pl.amenities:
                     there = False
-        if there:
-            newest.append(pl)
+                print(pl.amenities)
+            if there:
+                newest.append(pl)
 
     if newest:
         pls = newest
