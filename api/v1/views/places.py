@@ -98,15 +98,13 @@ def put_place(place_id):
 
 @app_views.route("/places_search", methods=["POST"], strict_slashes=False)
 @swag_from("documentation/places/search_place.yml", methods=["POST"])
-def search_place(city_id):
+def search_place():
     """
     Creates a City object
     """
     places_obs = []
     body = request.get_json()
 
-    if not storage.get(City, city_id):
-        abort(404)
     if not body:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
     if len(body) == 0:
