@@ -102,6 +102,8 @@ def search_place():
     """
     Creates a City object
     """
+    unique_list = []
+    seen = set()
     places_obs = []
     body = request.get_json()
 
@@ -128,6 +130,14 @@ def search_place():
             for ci in citt.places:
                 places_obs.append(ci.to_dict())
 
-    print(places_obs)
-    unique_list = list(set(places_obs))
+    for d in places_obs:
+        d_tuple = tuple(sorted(d.items()))
+
+        if d_tuple not in seen:
+            unique_list.append(d)
+            seen.add(d_tuple)
+
+    print(seen)
+    print("-------------------------------------------------------------")
+    print(unique_list)
     return jsonify(unique_list)
