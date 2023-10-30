@@ -5,11 +5,11 @@ from flask import abort, jsonify, make_response, request
 
 from api.v1.views import app_views
 from models import storage
+from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.state import State
 from models.user import User
-from models.amenity import Amenity
 
 
 @app_views.route(
@@ -139,7 +139,6 @@ def search_place():
         for conf in confirmed_places:
             del conf["amenities"]
             jj.append(conf)
-        print(jj)
         return jsonify(jj)
     else:
         return make_response(jsonify({"error": "Not a JSON"}), 400)

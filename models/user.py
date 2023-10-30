@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ holds class User"""
-from hashlib import md5
+import hashlib
 from os import getenv
 from typing import Any
 
@@ -31,19 +31,18 @@ class User(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """initializes user"""
+        if kwargs:
+            pwd = kwargs.pop("password", None)
+            if pwd:
+                User.__set_password(self, pwd)
+
         super().__init__(*args, **kwargs)
 
-    @property
-    def password(self):
-        return self._password
-
-    @password.setter
-    def password(self, value):
-        """Set the password"""
-        self._password = md5(value.encode()).hexdigest()
-
-    # def __setattr__(self, name, value) -> None:
-    #     """sets the attribute on the password"""
-    #     if name == "password":
-    #         value = md5(value.encode()).hexdigest()
-    #     super().__setattr__(name, value)
+    def __set_password(self, pwd):
+        """
+        custom setter: encrypts password to MD5
+        """
+        secure = hashlib.md5()
+        secure.update(pwd.encode("utf-8"))
+        secure_password = secure.hexdigest()
+        setattr(self, "password", secure_password)
