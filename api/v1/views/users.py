@@ -26,7 +26,6 @@ def get_a_user(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
-    print("user P =", user.password)
     return jsonify(user.to_dict())
 
 
