@@ -153,8 +153,8 @@ def search_place():
     for d in pls:
         d_tuple = tuple(sorted(d.items()))
 
+        print(d, d_tuple)
         if d_tuple not in seen:
-            print(d, d_tuple)
             unique_list.append(d)
             seen.add(d_tuple)
 
