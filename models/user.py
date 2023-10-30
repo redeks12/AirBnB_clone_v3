@@ -18,24 +18,32 @@ class User(BaseModel, Base):
     if models.storage_t == "db":
         __tablename__ = "users"
         email = Column(String(128), nullable=False)
-        password = Column(String(128), nullable=False)
+        _password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
         places = relationship("Place", backref="user", cascade="all, delete")
         reviews = relationship("Review", backref="user", cascade="all, delete")
     else:
         email = ""
-        password = ""
+        _password = ""
         first_name = ""
         last_name = ""
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        """Set the password"""
+        self._password = md5(value.encode()).hexdigest()
 
     def __init__(self, *args, **kwargs):
         """initializes user"""
         super().__init__(*args, **kwargs)
 
-    def __setattr__(self, name, value) -> None:
-        """sets the attribute on the password"""
-        if name == "password":
-            value = md5(value.encode()).hexdigest()
-            print(value)
-        super().__setattr__(name, value)
+    # def __setattr__(self, name, value) -> None:
+    #     """sets the attribute on the password"""
+    #     if name == "password":
+    #         value = md5(value.encode()).hexdigest()
+    #     super().__setattr__(name, value)

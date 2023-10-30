@@ -72,7 +72,12 @@ class BaseModel:
         new_dict["__class__"] = self.__class__.__name__
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
-        if include_password is None and "password" in new_dict:
+
+        if "_password" in new_dict:
+            new_dict["password"] = new_dict["_password"]
+            del new_dict["_password"]
+
+        if not include_password:
             del new_dict["password"]
         return new_dict
 
