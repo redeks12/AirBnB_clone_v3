@@ -137,7 +137,7 @@ def search_place():
                     break
         jj = []
         for conf in confirmed_places:
-            conf.pop("amenities", None)
+            del conf["amenities"]
             jj.append(conf)
         print(jj)
         return jsonify(jj)
