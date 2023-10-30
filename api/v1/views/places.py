@@ -148,7 +148,7 @@ def search_place():
             if there:
                 print("newest there")
                 newest.append(pl)
-
+    print(newest, "the newest")
     if newest:
         pls = newest
         print("newest")
