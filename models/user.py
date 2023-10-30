@@ -37,4 +37,4 @@ class User(BaseModel, Base):
         """sets the attribute on the password"""
         if name == "password":
             value = md5(value.encode()).hexdigest()
-        return super().__setattr__(name, value)
+        super().__setattr__(name, value)
