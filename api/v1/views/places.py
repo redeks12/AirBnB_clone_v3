@@ -144,7 +144,9 @@ def search_place():
                 newest.append(pl)
     if newest:
         pls = newest
+        print("newest")
     else:
+        print("oldest")
         pls = places_obs
 
     pls = [p.to_dict() for p in pls]
