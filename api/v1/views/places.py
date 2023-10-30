@@ -122,7 +122,6 @@ def search_place():
                 cit = storage.get(City, city.id)
                 for pl in cit.places:
                     places_obs.append(pl)
-                    # print(pl.amenity_ids)
 
     if "cities" in body:
         for city in body["cities"]:
@@ -133,32 +132,27 @@ def search_place():
     if "amenities" in body:
         if places_obs:
             ttt = places_obs
-            print("ttt- placeobs")
         else:
             ttt = storage.all(Place).values()
-            print("ttt- storage")
         for pl in ttt:
             there = True
             for amenity in body["amenities"]:
                 amm = storage.get(Amenity, amenity)
                 if amm not in pl.amenities:
-                    print("aMM not in pl.amenities")
                     there = False
-            print(len(pl.amenities))
             if there:
-                print("newest there")
                 newest.append(pl)
-    print(newest, "the newest")
     if newest:
         pls = newest
-        print("newest")
     else:
-        print("placeobs")
         pls = places_obs
 
     pls = [p.to_dict() for p in pls]
 
     for d in pls:
+        if "amenities" in d:
+            print(f'delete: ${d["amenities"]}')
+            del d["amenities"]
         d_tuple = tuple(sorted(d.items()))
 
         # print(d)
