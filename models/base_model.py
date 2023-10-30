@@ -73,13 +73,8 @@ class BaseModel:
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
 
-        if "_password" in new_dict:
-            new_dict["password"] = new_dict["_password"]
-            del new_dict["_password"]
-
-        if not include_password and "password" in new_dict:
-            del new_dict["password"]
-        print(new_dict)
+        if not include_password:
+            new_dict.pop("password", None)
         return new_dict
 
     def delete(self):
