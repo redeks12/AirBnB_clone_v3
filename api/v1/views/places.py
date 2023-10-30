@@ -156,9 +156,9 @@ def search_place():
     for d in pls:
         d_tuple = tuple(sorted(d.items()))
 
-        print(d)
-        print("---------------------------------------")
-        print(d_tuple)
+        # print(d)
+        # print("---------------------------------------")
+        # print(d_tuple)
         if d_tuple not in seen:
             unique_list.append(d)
             seen.add(d_tuple)
