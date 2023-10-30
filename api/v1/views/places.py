@@ -122,6 +122,7 @@ def search_place():
                 cit = storage.get(City, city.id)
                 for pl in cit.places:
                     places_obs.append(pl)
+                    print(pl.amenity_ids)
 
     if "cities" in body:
         for city in body["cities"]:
