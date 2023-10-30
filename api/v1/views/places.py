@@ -135,7 +135,13 @@ def search_place():
                 if amenity not in place_amenities:
                     confirmed_places.pop()
                     break
+        confirmed_places = [
+            confirmed.pop("amenities", None) for confirmed in confirmed_places
+        ]
         print(confirmed_places)
         return jsonify(confirmed_places)
     else:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
+
+
+# curl -X POST http://0.0.0.0:5000/api/v1/places_search -H "Content-Type: application/json" -d '{"states": ["d2398800-dd87-482b-be21-50a3063858ad", "0e391e25-dd3a-45f4-bce3-4d1dea83f3c7"], "cities": ["14e49d0b-7363-40e3-8854-a89e96481f67", "3ffd4ed8-b645-46bc-8bc3-40c0e51f2b44", "c5bbe76a-87f0-44f8-8b4d-e805e6cd757c"], "amenities": ["98850f9d-0835-46df-90e3-5fef156724a0"]}' -vvv
