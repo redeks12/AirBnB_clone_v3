@@ -15,7 +15,6 @@ def get_all_users():
     all_users = storage.all(User).values()
     list_users = []
     for user in all_users:
-        print(user.password)
         list_users.append(user.to_dict())
     return jsonify(list_users)
 
@@ -27,6 +26,7 @@ def get_a_user(user_id):
     user = storage.get(User, user_id)
     if user is None:
         abort(404)
+    print(user.password)
     return jsonify(user.to_dict())
 
 
