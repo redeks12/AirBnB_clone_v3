@@ -131,12 +131,14 @@ def search_place():
                 places_obs.append(ci)
 
     if "amenities" in body:
-        there = True
         if places_obs:
             ttt = places_obs
+            print("ttt- placeobs")
         else:
             ttt = storage.all(Place).values()
+            print("ttt- storage")
         for pl in ttt:
+            there = True
             for amenity in body["amenities"]:
                 amm = storage.get(Amenity, amenity)
                 if amm not in pl.amenities:
