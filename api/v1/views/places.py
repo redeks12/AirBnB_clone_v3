@@ -9,6 +9,7 @@ from models.city import City
 from models.place import Place
 from models.state import State
 from models.user import User
+from models.amenity import Amenity
 
 
 @app_views.route(
@@ -106,6 +107,7 @@ def search_place():
     seen = set()
     places_obs = []
     body = request.get_json()
+    newest = []
 
     if not body:
         return make_response(jsonify({"error": "Not a JSON"}), 400)
@@ -122,13 +124,34 @@ def search_place():
                 cit = storage.get(City, city.id)
                 for pl in cit.places:
                     print("getting the places")
-                    places_obs.append(pl.to_dict())
+                    places_obs.append(pl)
 
     if "cities" in body:
         for city in body["cities"]:
             citt = storage.get(City, city)
             for ci in citt.places:
-                places_obs.append(ci.to_dict())
+                places_obs.append(ci)
+
+    if "amenities" in body:
+        there = True
+        if places_obs:
+            ttt = places_obs
+        else:
+            ttt = storage.all(Place).values()
+        for pl in ttt:
+            for amenity in body["amenities"]:
+                amm = storage.get(Amenity, amenity)
+                if amm not in pl.amenities:
+                    there = False
+            if there:
+                newest.append(pl)
+
+    if newest:
+        pls = newest
+    else:
+        pls = places_obs
+
+    pls = [p.to_dict() for p in pls]
 
     for d in places_obs:
         d_tuple = tuple(sorted(d.items()))
@@ -137,7 +160,4 @@ def search_place():
             unique_list.append(d)
             seen.add(d_tuple)
 
-    print(seen)
-    print("-------------------------------------------------------------")
-    print(unique_list)
     return jsonify(unique_list)
