@@ -7,6 +7,7 @@ from api.v1.views import app_views
 from models import storage
 from models.city import City
 from models.place import Place
+from models.state import State
 from models.user import User
 
 
@@ -50,7 +51,7 @@ def delete_place(place_id):
 @app_views.route(
     "/cities/<string:city_id>/places", methods=["POST"], strict_slashes=False
 )
-@swag_from("documentation/city/post_city.yml", methods=["POST"])
+@swag_from("documentation/place/post_place.yml", methods=["POST"])
 def post_place(city_id):
     """
     Creates a City object
@@ -93,3 +94,37 @@ def put_place(place_id):
     storage.save()
 
     return jsonify(place.to_dict())
+
+
+@app_views.route("/places_search", methods=["POST"], strict_slashes=False)
+@swag_from("documentation/places/search_place.yml", methods=["POST"])
+def search_place(city_id):
+    """
+    Creates a City object
+    """
+    places_obs = []
+    body = request.get_json()
+
+    if not storage.get(City, city_id):
+        abort(404)
+    if not body:
+        return make_response(jsonify({"error": "Not a JSON"}), 400)
+    if len(body) == 0:
+        places = storage.all(Place).values()
+        return jsonify([cit.to_dict() for cit in places])
+
+    if "states" in body:
+        for state in body["states"]:
+            st = storage.get(State, state["id"])
+            for city in st.cities:
+                cit = storage.get(City, city.id)
+                for pl in cit.places:
+                    places_obs.append(pl.to_dict())
+
+    # if not storage.get(User, body["user_id"]):
+    #     abort(404)
+
+    # instance = Place(**body)
+    # instance.city_id = city_id
+    # instance.save()
+    return jsonify(places_obs)
