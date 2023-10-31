@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""handles all default RESTFul API actions for User"""
+""" objects that handle all default RestFul API actions for Users """
 from flasgger.utils import swag_from
 from flask import Flask, abort, jsonify, make_response, request
 
