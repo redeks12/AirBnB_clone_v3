@@ -30,6 +30,7 @@ app.config["SWAGGER"] = {"title": "AirBnB clone Restful API", "uiversion": 3}
 Swagger(app)
 
 if __name__ == "__main__":
+    """Main Function"""
     port = getenv("HBNB_API_PORT")
     host = getenv("HBNB_API_HOST")
     if not host:
