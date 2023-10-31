@@ -4,6 +4,7 @@ from flask import Flask, make_response, jsonify
 from models import storage
 from api.v1.views import app_views
 from os import getenv
+from flasgger import Swagger
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -23,6 +24,10 @@ def page_not_found(error):
     """loads a custom 404 page not found"""
     return make_response(jsonify({"error": "Not found"}), 404)
 
+
+app.config["SWAGGER"] = {"title": "AirBnB clone Restful API", "uiversion": 3}
+
+Swagger(app)
 
 if __name__ == "__main__":
     port = getenv("HBNB_API_PORT")
